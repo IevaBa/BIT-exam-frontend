@@ -12,10 +12,16 @@ function AddDish(props) {
   const [menus, setMenus] = useState([]);
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState({});
+  const [token, _] = useState(localStorage.getItem("token"));
 
   // Fetch menus
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/menus")
+    fetch("http://localhost:8000/api/v1/menus", {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((result) => {
         //  console.log(result);
@@ -33,7 +39,12 @@ function AddDish(props) {
     formData.append("menu_id", menu_id);
 
     await axios
-      .post(`http://localhost:8000/api/v1/dishes`, formData)
+      .post(`http://localhost:8000/api/v1/dishes`, formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",

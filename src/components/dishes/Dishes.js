@@ -8,10 +8,22 @@ function Dishes(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [dishes, setDishes] = useState([]);
   const navigate = useNavigate();
+  const [token, _] = useState(localStorage.getItem("token"));
   // LIST DISHES
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/dishes")
-      .then((res) => res.json())
+    if (!token) return navigate("/login");
+    let h = { Accept: "application/json", Authorization: `Bearer ${token}` };
+    fetch("http://localhost:8000/api/v1/dishes", { headers: h })
+      .then((res) => {
+        if (!res.ok) {
+          // 401
+          setError(res);
+          setIsLoaded(true);
+          //console.log(token);
+        } else {
+          return res.json();
+        }
+      })
       .then(
         (result) => {
           //  console.log(result);
@@ -27,9 +39,15 @@ function Dishes(props) {
 
   // DELETE
   const fetchDishes = async () => {
-    await axios.get(`http://localhost:8000/api/v1/dishes`).then(({ data }) => {
-      setDishes(data);
-    });
+    let h = { Accept: "application/json", Authorization: `Bearer ${token}` };
+    await axios
+      .get(`http://localhost:8000/api/v1/dishes`, {
+        headers: h,
+        credentials: "include",
+      })
+      .then(({ data }) => {
+        setDishes(data);
+      });
   };
   const deleteDish = async (id) => {
     const isConfirm = await Swal.fire({
@@ -49,7 +67,12 @@ function Dishes(props) {
     }
 
     await axios
-      .delete(`http://localhost:8000/api/v1/dishes/${id}`)
+      .delete(`http://localhost:8000/api/v1/dishes/${id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",

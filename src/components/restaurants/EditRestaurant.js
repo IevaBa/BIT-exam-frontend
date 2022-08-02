@@ -10,15 +10,22 @@ export default function EditRestaurant() {
   const [title, setTitle] = useState({});
   const [address, setAddress] = useState({});
   const [validationError, setValidationError] = useState({});
+  const [token, _] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
+    if (!token) return navigate("/login");
     fetchRestaurant();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchRestaurant = async () => {
     await axios
-      .get(`http://localhost:8000/api/v1/restaurants/${id}`)
+      .get(`http://localhost:8000/api/v1/restaurants/${id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         const { title, address } = data;
         setTitle(title);
@@ -35,7 +42,12 @@ export default function EditRestaurant() {
     formData.append("address", address);
 
     await axios
-      .post(`http://localhost:8000/api/v1/restaurants/${id}`, formData)
+      .post(`http://localhost:8000/api/v1/restaurants/${id}`, formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",

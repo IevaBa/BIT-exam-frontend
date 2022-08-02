@@ -8,10 +8,22 @@ function Menus(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [menus, setMenus] = useState([]);
   const navigate = useNavigate();
+  const [token, _] = useState(localStorage.getItem("token"));
   // LIST MENUS
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/menus")
-      .then((res) => res.json())
+    if (!token) return navigate("/login");
+    let h = { Accept: "application/json", Authorization: `Bearer ${token}` };
+    fetch("http://localhost:8000/api/v1/menus", { headers: h })
+      .then((res) => {
+        if (!res.ok) {
+          // 401
+          setError(res);
+          setIsLoaded(true);
+          //console.log(token);
+        } else {
+          return res.json();
+        }
+      })
       .then(
         (result) => {
           //  console.log(result);
@@ -27,9 +39,15 @@ function Menus(props) {
 
   // DELETE
   const fetchMenus = async () => {
-    await axios.get(`http://localhost:8000/api/v1/menus`).then(({ data }) => {
-      setMenus(data);
-    });
+    let h = { Accept: "application/json", Authorization: `Bearer ${token}` };
+    await axios
+      .get(`http://localhost:8000/api/v1/menus`, {
+        headers: h,
+        credentials: "include",
+      })
+      .then(({ data }) => {
+        setMenus(data);
+      });
   };
   const deleteMenu = async (id) => {
     const isConfirm = await Swal.fire({
@@ -49,7 +67,12 @@ function Menus(props) {
     }
 
     await axios
-      .delete(`http://localhost:8000/api/v1/menus/${id}`)
+      .delete(`http://localhost:8000/api/v1/menus/${id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",

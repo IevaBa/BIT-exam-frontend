@@ -11,15 +11,22 @@ export default function EditMenu() {
   const [restaurant_id, setRestaurant] = useState("");
   const [restaurants, setRestaurants] = useState([]);
   const [validationError, setValidationError] = useState({});
+  const [token, _] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
+    if (!token) return navigate("/login");
     fetchMenus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Fetch restaurants
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/restaurants")
+    fetch("http://localhost:8000/api/v1/restaurants", {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((result) => {
         //  console.log(result);
@@ -29,7 +36,12 @@ export default function EditMenu() {
 
   const fetchMenus = async () => {
     await axios
-      .get(`http://localhost:8000/api/v1/menus/${id}`)
+      .get(`http://localhost:8000/api/v1/menus/${id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         const { title, restaurant_id } = data;
         setTitle(title);
@@ -46,7 +58,12 @@ export default function EditMenu() {
     formData.append("restaurant_id", restaurant_id);
 
     await axios
-      .post(`http://localhost:8000/api/v1/menus/${id}`, formData)
+      .post(`http://localhost:8000/api/v1/menus/${id}`, formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",

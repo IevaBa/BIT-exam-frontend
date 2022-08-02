@@ -1,7 +1,7 @@
 import Header from "./components/header/Header";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-//import Login from "./components/auth/Login";
-//import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import error from "./404error.png";
 import Dishes from "./components/dishes/Dishes";
 import Restaurants from "./components/restaurants/Restaurants";
@@ -13,11 +13,32 @@ import EditRestaurant from "./components/restaurants/EditRestaurant";
 import EditMenu from "./components/menus/EditMenu";
 import EditDish from "./components/dishes/EditDish";
 import SearchRestaurant from "./components/restaurants/SearchRestaurant";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [logedIn, setLogedIn] = useState(false);
+  const [token, _] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(localStorage.getItem("username"));
+  const [admin, setAdmin] = useState(JSON.parse(localStorage.getItem("admin")));
+  useEffect(() => {
+    if (token) {
+      setLogedIn(true);
+      setUser(localStorage.getItem("username"));
+      console.log("setted");
+      console.log(user);
+    }
+    admin === false ? setAdmin(false) : setAdmin(true);
+  }, [token]);
   return (
     <BrowserRouter>
-      <Header />
+      <Header
+        logedIn={logedIn}
+        setLogedIn={setLogedIn}
+        token={token}
+        user={user}
+        admin={admin}
+        setAdmin={setAdmin}
+      />
       <Routes>
         <Route path="/" element={<Restaurants />} />
         <Route path="/restaurants" element={<Restaurants />} />
@@ -30,8 +51,18 @@ function App() {
         <Route path="/dishes" element={<Dishes />} />
         <Route path="/dishes/add" element={<AddDish />} />
         <Route path="/dishes/edit/:id" element={<EditDish />} />
-        {/* <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} /> */}
+        <Route
+          path="/login"
+          element={
+            <Login
+              logedIn={logedIn}
+              setLogedIn={setLogedIn}
+              token={token}
+              user={user}
+            />
+          }
+        />
+        <Route path="/register" element={<Register />} />
         <Route
           path="*"
           element={

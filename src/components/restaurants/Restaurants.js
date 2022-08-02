@@ -9,10 +9,23 @@ function Restaurants(props) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
+  const [token, _] = useState(localStorage.getItem("token"));
+
   // LIST RESTAURANTS
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/restaurants")
-      .then((res) => res.json())
+    if (!token) return navigate("/login");
+    let h = { Accept: "application/json", Authorization: `Bearer ${token}` };
+    fetch("http://localhost:8000/api/v1/restaurants", { headers: h })
+      .then((res) => {
+        if (!res.ok) {
+          // 401
+          setError(res);
+          setIsLoaded(true);
+          //console.log(token);
+        } else {
+          return res.json();
+        }
+      })
       .then(
         (result) => {
           //console.log(result);
@@ -28,8 +41,12 @@ function Restaurants(props) {
 
   // DELETE
   const fetchRestaurants = async () => {
+    let h = { Accept: "application/json", Authorization: `Bearer ${token}` };
     await axios
-      .get(`http://localhost:8000/api/v1/restaurants`)
+      .get(`http://localhost:8000/api/v1/restaurants`, {
+        headers: h,
+        credentials: "include",
+      })
       .then(({ data }) => {
         setRestaurants(data);
       });
@@ -52,7 +69,12 @@ function Restaurants(props) {
     }
 
     await axios
-      .delete(`http://localhost:8000/api/v1/restaurants/${id}`)
+      .delete(`http://localhost:8000/api/v1/restaurants/${id}`, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",
@@ -105,11 +127,18 @@ function Restaurants(props) {
                   </td>
                   <td>
                     <div className="text-center">
-                      <Link to={"/restaurants/edit/" + restaurant.id}>
+                      <Link
+                        // style={
+                        //   JSON.parse(localStorage.getItem("admin")) === 1
+                        //     ? { display: "inline" }
+                        //     : { display: "none" }
+                        // }
+                        to={"/restaurants/edit/" + restaurant.id}
+                      >
                         <button className="btn btn-primary">Update</button>
                       </Link>
                       <button
-                        className="btn btn-danger ms-3"
+                        className="btn btn-danger mx-3 mt-2"
                         onClick={() => deleteRestaurant(restaurant.id)}
                       >
                         Delete

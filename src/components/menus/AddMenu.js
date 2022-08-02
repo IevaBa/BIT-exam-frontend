@@ -10,10 +10,16 @@ function AddMenu(props) {
   const [restaurants, setRestaurants] = useState([]);
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState({});
+  const [token, _] = useState(localStorage.getItem("token"));
 
   // Fetch restaurants
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/restaurants")
+    fetch("http://localhost:8000/api/v1/restaurants", {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => res.json())
       .then((result) => {
         //  console.log(result);
@@ -29,7 +35,12 @@ function AddMenu(props) {
     formData.append("restaurant_id", restaurant_id);
 
     await axios
-      .post(`http://localhost:8000/api/v1/menus`, formData)
+      .post(`http://localhost:8000/api/v1/menus`, formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",

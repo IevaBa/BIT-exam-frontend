@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Card } from "react-bootstrap";
-import { Button } from "react-bootstrap";
 
 function SearchRestaurant() {
   const [restaurants, setRestaurants] = useState([]);
+  const [token, _] = useState(localStorage.getItem("token"));
 
   async function search(key) {
     console.log(key);

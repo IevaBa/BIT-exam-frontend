@@ -9,6 +9,7 @@ function AddRestaurant() {
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
   const [validationError, setValidationError] = useState({});
+  const [token, _] = useState(localStorage.getItem("token"));
 
   const AddRestaurant = async (e) => {
     e.preventDefault();
@@ -19,7 +20,12 @@ function AddRestaurant() {
     formData.append("address", address);
 
     await axios
-      .post(`http://localhost:8000/api/v1/restaurants`, formData)
+      .post(`http://localhost:8000/api/v1/restaurants`, formData, {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then(({ data }) => {
         Swal.fire({
           icon: "success",
