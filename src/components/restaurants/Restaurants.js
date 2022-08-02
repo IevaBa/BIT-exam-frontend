@@ -109,7 +109,17 @@ function Restaurants(props) {
                 <th>Title</th>
                 <th>Address</th>
                 <th>Menu</th>
-                <th>Actions</th>
+                <th>
+                  <div
+                    style={
+                      JSON.parse(localStorage.getItem("admin")) === 1
+                        ? { display: "inline" }
+                        : { display: "none" }
+                    }
+                  >
+                    Actions
+                  </div>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -128,16 +138,21 @@ function Restaurants(props) {
                   <td>
                     <div className="text-center">
                       <Link
-                        // style={
-                        //   JSON.parse(localStorage.getItem("admin")) === 1
-                        //     ? { display: "inline" }
-                        //     : { display: "none" }
-                        // }
+                        style={
+                          JSON.parse(localStorage.getItem("admin")) === 1
+                            ? { display: "inline" }
+                            : { display: "none" }
+                        }
                         to={"/restaurants/edit/" + restaurant.id}
                       >
                         <button className="btn btn-primary">Update</button>
                       </Link>
                       <button
+                        style={
+                          JSON.parse(localStorage.getItem("admin")) === 1
+                            ? { display: "inline" }
+                            : { display: "none" }
+                        }
                         className="btn btn-danger mx-3 mt-2"
                         onClick={() => deleteRestaurant(restaurant.id)}
                       >

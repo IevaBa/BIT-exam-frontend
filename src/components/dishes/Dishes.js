@@ -107,7 +107,15 @@ function Dishes(props) {
                 <th>Description</th>
                 <th>Image</th>
                 <th>Menu</th>
-                <th>Actions</th>
+                <div
+                  style={
+                    JSON.parse(localStorage.getItem("admin")) === 1
+                      ? { display: "inline" }
+                      : { display: "none" }
+                  }
+                >
+                  <th>Actions</th>
+                </div>
               </tr>
             </thead>
             <tbody>
@@ -127,9 +135,23 @@ function Dishes(props) {
                   <td>
                     <div className="text-center">
                       <Link to={"/dishes/edit/" + dish.id}>
-                        <button className="btn btn-primary">Update</button>
+                        <button
+                          style={
+                            JSON.parse(localStorage.getItem("admin")) === 1
+                              ? { display: "inline" }
+                              : { display: "none" }
+                          }
+                          className="btn btn-primary"
+                        >
+                          Update
+                        </button>
                       </Link>
                       <button
+                        style={
+                          JSON.parse(localStorage.getItem("admin")) === 1
+                            ? { display: "inline" }
+                            : { display: "none" }
+                        }
                         className="btn btn-danger mt-2 mx-2"
                         onClick={() => deleteDish(dish.id)}
                       >
@@ -142,6 +164,11 @@ function Dishes(props) {
             </tbody>
           </table>
           <button
+            style={
+              JSON.parse(localStorage.getItem("admin")) === 1
+                ? { display: "inline" }
+                : { display: "none" }
+            }
             className="btn btn-success"
             onClick={() => navigate("/dishes/add")}
           >
