@@ -9,6 +9,9 @@ import AddDish from "./components/dishes/AddDish";
 import AddRestaurant from "./components/restaurants/AddRestaurant";
 import Menus from "./components/menus/Menus";
 import AddMenu from "./components/menus/AddMenu";
+import EditRestaurant from "./components/restaurants/EditRestaurant";
+import EditMenu from "./components/menus/EditMenu";
+import EditDish from "./components/dishes/EditDish";
 
 function App() {
   return (
@@ -18,10 +21,13 @@ function App() {
         <Route path="/" element={<Restaurants />} />
         <Route path="/restaurants" element={<Restaurants />} />
         <Route path="/restaurants/add" element={<AddRestaurant />} />
+        <Route path="/restaurants/edit/:id" element={<EditRestaurant />} />
         <Route path="/menus" element={<Menus />} />
         <Route path="/menus/add" element={<AddMenu />} />
+        <Route path="/menus/edit/:id" element={<EditMenu />} />
         <Route path="/dishes" element={<Dishes />} />
         <Route path="/dishes/add" element={<AddDish />} />
+        <Route path="/dishes/edit/:id" element={<EditDish />} />
         {/* <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} /> */}
         <Route

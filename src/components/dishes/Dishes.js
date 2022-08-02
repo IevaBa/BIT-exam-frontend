@@ -94,7 +94,7 @@ function Dishes(props) {
                   <td>{dish.description}</td>
                   <td>
                     <img
-                      style={{ width: "200px" }}
+                      style={{ width: "200px", height: "150px" }}
                       className="rounded mx-auto d-block"
                       src={dish.foto_url}
                       alt="dish_foto"
