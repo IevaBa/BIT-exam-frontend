@@ -98,7 +98,7 @@ function Restaurants(props) {
                   <td>{restaurant.address}</td>
                   <td>
                     <div className="text-center">
-                      <Link to={"/menus/" + restaurant.id}>
+                      <Link to={"/menus/"}>
                         <button className="btn btn-secondary">View Menu</button>
                       </Link>
                     </div>

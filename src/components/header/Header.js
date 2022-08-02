@@ -24,6 +24,18 @@ const Header = () => {
                 ? "a nav-link active text-secondary fw-bold"
                 : "a nav-link text-secondary"
             }
+            to="/search"
+          >
+            Search Restaurant
+          </NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "a nav-link active text-secondary fw-bold"
+                : "a nav-link text-secondary"
+            }
             to="/menus"
           >
             Menus

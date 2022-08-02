@@ -12,6 +12,7 @@ import AddMenu from "./components/menus/AddMenu";
 import EditRestaurant from "./components/restaurants/EditRestaurant";
 import EditMenu from "./components/menus/EditMenu";
 import EditDish from "./components/dishes/EditDish";
+import SearchRestaurant from "./components/restaurants/SearchRestaurant";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/restaurants" element={<Restaurants />} />
         <Route path="/restaurants/add" element={<AddRestaurant />} />
         <Route path="/restaurants/edit/:id" element={<EditRestaurant />} />
+        <Route path="/search" element={<SearchRestaurant />} />
         <Route path="/menus" element={<Menus />} />
         <Route path="/menus/add" element={<AddMenu />} />
         <Route path="/menus/edit/:id" element={<EditMenu />} />
